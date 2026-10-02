@@ -166,7 +166,7 @@ blockquote.ev{border-inline-start-color:var(--wadi)}
     <details class="float layers ui">
       <summary>الطبقات</summary>
       <div class="opts">
-        <label><input type="checkbox" id="satToggle"> صور الأقمار الصناعية</label>
+        <label><input type="checkbox" id="satToggle" checked> صور الأقمار الصناعية</label>
         <label><input type="checkbox" data-layer="wadiG" checked> الأودية</label>
         <label><input type="checkbox" data-layer="physG" checked> أسماء الجبال والأودية</label>
         <label><input type="checkbox" data-layer="townG" checked> مدن اليوم</label>
@@ -436,7 +436,7 @@ function updateSat(){if(!satOn)return;const r=svg.getBoundingClientRect();const 
  // keep lower zooms underneath, drop far-off levels
  [...satG.children].forEach(c=>{const cz=+c.dataset.z;if(cz>z){c.remove();satCache.forEach((v,k2)=>{if(v===c)satCache.delete(k2);});}});
  [...satG.children].sort((a,b)=>a.dataset.z-b.dataset.z).forEach(c=>satG.appendChild(c));}
-function satNote(){const n=document.getElementById("satNote");if(satOn&&satFailed>0&&satOk===0){n.hidden=false;}else n.hidden=true;
+let noteShown=false;function satNote(){const n=document.getElementById("satNote");if(satOn&&satFailed>0&&satOk===0&&!noteShown){noteShown=true;n.hidden=false;setTimeout(()=>{n.hidden=true;},7000);}else if(satOk>0)n.hidden=true;
  document.getElementById("attrib").hidden=!(satOn&&satOk>0);svg.classList.toggle("sat",satOn&&satOk>0);}
 function setSat(on){satOn=on;satG.style.display=on?"":"none";if(on)updateSat();satNote();}
 
@@ -607,7 +607,7 @@ document.getElementById("themeBtn").onclick=()=>{root.dataset.theme=root.dataset
 document.addEventListener("keydown",e=>{if(e.target.closest("input"))return;if(e.key==="ArrowLeft")go(cur+1,true);if(e.key==="ArrowRight")go(cur-1,true);});
 
 /* init */
-setVB(fitRoute());measure();setProg(0);highlight(0);
+setVB(fitRoute());measure();setProg(0);highlight(0);setSat(true);
 (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(()=>{measure();declutter();});
 window.addEventListener("resize",()=>{setVB({...vb,h:vb.w*aspect()});});
 })();
